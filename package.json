@@ -31,5 +31,8 @@
     "react-draft-wysiwyg": "^1.15.0",
     "typescript": "^5.4.4",
     "uuid": "^9.0.1"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.5"
   }
 }
