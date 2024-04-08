@@ -1,95 +1,116 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import ArticleCard from "../components/ArticleCard";
+import Search from "../components/Search";
+import Categories from "../components/Categories";
+import { Container, Grid, GridItem, Input, Button } from "@chakra-ui/react";
+import Nav from "../components/Nav";
+
+const page = () => {
+  const [loading, setLoading] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [postsPerPage, setPostsPerPage] = useState(3);
+  const [data, setData] = useState([]);
+  const [category, setCategory] = useState([]);
+  const [search, setSearch] = useState();
+  const fetchArticles = async () => {
+    try {
+      const response = await fetch(`/api/articles`);
+      const articleData = await response.json();
+      if (articleData) {
+        setData(articleData);
+        setCategory(articleData);
+      }
+      setLoading(false);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  useEffect(() => {
+    fetchArticles();
+  }, []);
+
+  const handleClick = async (event) => {
+    setCategory(data);
+    if (event.target.tagName === "LI") {
+      const clickedItem = event.target.textContent;
+      console.log(clickedItem);
+      const categorisedData = data.filter((i) => i.category == clickedItem);
+      setCategory(categorisedData);
+    }
+  };
+
+  const handleSearch = async () => {
+    setCategory(data);
+    const filtered = data.filter((item) => {
+      return Object.values(item).some(
+        (value) =>
+          typeof value === "string" &&
+          value.toLowerCase().includes(search.toLowerCase())
+      );
+    });
+    setCategory(filtered);
+    setSearch("");
+  };
+
+  // Get current posts
+  const indexOfLastPost = currentPage * postsPerPage;
+  const indexOfFirstPost = indexOfLastPost - postsPerPage;
+  const currentPosts = category.slice(indexOfFirstPost, indexOfLastPost);
+
+  // Change page
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  if (loading) {
+    return <h1>Loading...</h1>;
+  }
+
   return (
-    <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>app/page.js</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{" "}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore starter templates for Next.js.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
-      </div>
-    </main>
+    <section>
+      <Nav />
+      <Container maxW="6xl" mt="100px" mb={10}>
+        <Grid templateColumns="repeat(4, 1fr)" gap={10}>
+          <GridItem colSpan={3}>
+            {currentPosts.map((item) => (
+              <ArticleCard
+                key={item._id}
+                articleId={item._id}
+                title={item.title}
+                description={item.description}
+                category={item.category}
+                author={item.author.name}
+                publishedDate={item.createdAt.substring(0, 10)}
+                imageSrc={("/" + item.imageURL.replace(/\\/g, "/")).substring(
+                  7
+                )}
+              />
+            ))}
+            {/* pagination */}
+            <div>
+              {[...Array(Math.ceil(category.length / postsPerPage)).keys()].map(
+                (number) => (
+                  <Button
+                    mr={2}
+                    colorScheme="teal"
+                    variant="outline"
+                    key={number}
+                    onClick={() => paginate(number + 1)}
+                  >
+                    {number + 1}
+                  </Button>
+                )
+              )}
+            </div>
+          </GridItem>
+          <GridItem colStart={4} colEnd={8}>
+            <Search setSearch={setSearch} handleSearch={handleSearch} />
+            <Categories handleSubmit={handleClick} />
+          </GridItem>
+        </Grid>
+      </Container>
+    </section>
   );
-}
+};
+
+export default page;
