@@ -4,7 +4,7 @@ import ArticleForm from "../../../../components/ArticleForm";
 import { useRouter } from "next/navigation";
 import { EditorState, convertToRaw } from "draft-js";
 import draftToHtml from "draftjs-to-html";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
 import Nav from "../../../../components/Nav";
 const page = () => {

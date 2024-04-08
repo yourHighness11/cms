@@ -1,8 +1,6 @@
 import { connectToDB } from "../../../../utils/database";
 import Article from "../../../../models/Article";
-import User from "../../../../models/User";
 import jwt from "jsonwebtoken";
-import { request } from "express";
 import { headers } from "next/headers";
 
 export const GET = async (request, { params }) => {

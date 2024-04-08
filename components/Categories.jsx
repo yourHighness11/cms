@@ -1,5 +1,4 @@
 import { Card, CardBody, ListItem, List, Center } from "@chakra-ui/react";
-import { Link } from "next/navigation";
 const Categories = ({ handleSubmit }) => {
   return (
     <div>
