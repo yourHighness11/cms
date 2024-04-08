@@ -1,15 +1,10 @@
 import Article from "../../../../models/Article";
 import { connectToDB } from "../../../../utils/database";
-import fs from "fs";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { headers } from "next/headers";
 
 export async function POST(req) {
-  const uploadFolderPath = "public/uploads";
-  if (!fs.existsSync(uploadFolderPath)) {
-    fs.mkdirSync(uploadFolderPath, { recursive: true });
-  }
   try {
     await connectToDB();
 
@@ -29,49 +24,12 @@ export async function POST(req) {
       );
     }
 
-    jwt.verify(
-      token.split(" ")[1],
-      process.env.WEB_TOKEN,
-      (err, decoded) => {
-        if (err) {
-          return NextResponse.json(
-            { message: "Unauthorized" },
-            { status: 401 }
-          );
-        }
-        req.userId = decoded.userId; // Add userId to request object
+    jwt.verify(token.split(" ")[1], process.env.WEB_TOKEN, (err, decoded) => {
+      if (err) {
+        return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
       }
-    );
-
-    // file upload logic
-    // for (const entry of Array.from(data.entries())) {
-    //   const value = entry[1];
-
-    //   const isFile = typeof value === "object";
-
-    //   if (isFile) {
-    //     const blob = value;
-    //     const filename = blob.name;
-    //     filePath = path.join(
-    //       uploadFolderPath,
-    //       String(Date.now()) + filename.replace(/\s+/g, "")
-    //     );
-
-    //     // Check if the file already exists
-    //     if (fs.existsSync(filePath)) {
-    //       return NextResponse.json(
-    //         { message: "File is already there" },
-    //         { status: 500 }
-    //       );
-    //     }
-
-    //     const buffer = Buffer.from(await blob.arrayBuffer());
-
-    //     fs.writeFileSync(filePath, buffer);
-
-    //     console.log(`File saved: ${filePath}`);
-    //   }
-    // }
+      req.userId = decoded.userId; // Add userId to request object
+    });
 
     const newArticle = new Article({
       title,
