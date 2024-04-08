@@ -4,10 +4,7 @@ import Article from "../../../../../models/Article";
 export const GET = async (request, { params }) => {
   try {
     await connectToDB();
-    const article = await Article.findById(params.id).populate(
-      "author",
-      "name"
-    );
+    const article = await Article.findById(params.id);
 
     return new Response(JSON.stringify(article), { status: 200 });
   } catch (error) {

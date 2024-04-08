@@ -1,6 +1,7 @@
 import { connectToDB } from "../../../../utils/database";
 import Article from "../../../../models/Article";
 import jwt from "jsonwebtoken";
+import User from "../../../../models/User";
 import { headers } from "next/headers";
 
 export const GET = async (request, { params }) => {
@@ -23,7 +24,8 @@ export const GET = async (request, { params }) => {
     }
     const articles = await Article.find({ author: params.id }).populate(
       "author",
-      "name"
+      "name",
+      User
     );
 
     if (!articles) return new Response("Articles Not Found", { status: 404 });

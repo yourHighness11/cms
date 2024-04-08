@@ -10,7 +10,7 @@ import Nav from "../components/Nav";
 const page = () => {
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
-  const [postsPerPage, setPostsPerPage] = useState(3);
+  const [postsPerPage, setPostsPerPage] = useState(20);
   const [data, setData] = useState([]);
   const [category, setCategory] = useState([]);
   const [search, setSearch] = useState();
