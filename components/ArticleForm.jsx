@@ -20,6 +20,7 @@ const ArticleForm = ({
   handleSubmit,
   editorState,
   setEditorState,
+  loading
 }) => {
   return (
     <div>
@@ -73,7 +74,7 @@ const ArticleForm = ({
                 Cancel
               </Button>
             </Link>
-            <Button colorScheme={"blue"} onClick={handleSubmit}>
+            <Button isLoading={loading} colorScheme={"blue"} onClick={handleSubmit}>
               Submit
             </Button>
           </CardBody>

@@ -27,7 +27,7 @@ const page = () => {
 
   return (
     <section>
-    <Nav />
+      <Nav />
       <Container maxW="4xl">
         <Profile userName={user_name} />
         {data.map((item) => (
@@ -38,7 +38,7 @@ const page = () => {
             description={item.description}
             category={item.category}
             author={item.author.name}
-            imageSrc={("/" + item.imageURL.replace(/\\/g, "/")).substring(7)}
+            imageSrc={item.imageURL}
           />
         ))}
       </Container>

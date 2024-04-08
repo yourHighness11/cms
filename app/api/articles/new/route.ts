@@ -1,7 +1,6 @@
 import Article from "../../../../models/Article";
 import { connectToDB } from "../../../../utils/database";
 import fs from "fs";
-import path from "path";
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 import { headers } from "next/headers";
@@ -13,7 +12,6 @@ export async function POST(req) {
   }
   try {
     await connectToDB();
-    let filePath = "";
 
     const data = await req.formData();
     const title = data.get("title");
@@ -21,6 +19,7 @@ export async function POST(req) {
     const content = data.get("content");
     const category = data.get("category");
     const author = data.get("author");
+    const imageURL = data.get("image");
     const token = headers().get("authorization");
 
     if (!token) {
@@ -45,41 +44,41 @@ export async function POST(req) {
     );
 
     // file upload logic
-    for (const entry of Array.from(data.entries())) {
-      const value = entry[1];
+    // for (const entry of Array.from(data.entries())) {
+    //   const value = entry[1];
 
-      const isFile = typeof value === "object";
+    //   const isFile = typeof value === "object";
 
-      if (isFile) {
-        const blob = value;
-        const filename = blob.name;
-        filePath = path.join(
-          uploadFolderPath,
-          String(Date.now()) + filename.replace(/\s+/g, "")
-        );
+    //   if (isFile) {
+    //     const blob = value;
+    //     const filename = blob.name;
+    //     filePath = path.join(
+    //       uploadFolderPath,
+    //       String(Date.now()) + filename.replace(/\s+/g, "")
+    //     );
 
-        // Check if the file already exists
-        if (fs.existsSync(filePath)) {
-          return NextResponse.json(
-            { message: "File is already there" },
-            { status: 500 }
-          );
-        }
+    //     // Check if the file already exists
+    //     if (fs.existsSync(filePath)) {
+    //       return NextResponse.json(
+    //         { message: "File is already there" },
+    //         { status: 500 }
+    //       );
+    //     }
 
-        const buffer = Buffer.from(await blob.arrayBuffer());
+    //     const buffer = Buffer.from(await blob.arrayBuffer());
 
-        fs.writeFileSync(filePath, buffer);
+    //     fs.writeFileSync(filePath, buffer);
 
-        console.log(`File saved: ${filePath}`);
-      }
-    }
+    //     console.log(`File saved: ${filePath}`);
+    //   }
+    // }
 
     const newArticle = new Article({
       title,
       description,
       content,
       category,
-      imageURL: filePath,
+      imageURL,
       author,
       createdAt: Date.now(),
     });

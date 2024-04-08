@@ -35,7 +35,7 @@ const page = () => {
     setCategory(data);
     if (event.target.tagName === "LI") {
       const clickedItem = event.target.textContent;
-      console.log(clickedItem);
+      // console.log(clickedItem);
       const categorisedData = data.filter((i) => i.category == clickedItem);
       setCategory(categorisedData);
     }
@@ -81,9 +81,7 @@ const page = () => {
                 category={item.category}
                 author={item.author.name}
                 publishedDate={item.createdAt.substring(0, 10)}
-                imageSrc={("/" + item.imageURL.replace(/\\/g, "/")).substring(
-                  7
-                )}
+                imageSrc={item.imageURL}
               />
             ))}
             {/* pagination */}
