@@ -18,9 +18,9 @@ const page = () => {
         },
       });
       const articleData = await response.json();
-      if (articleData) {
-        setData(articleData);
-      }
+      // if (articleData) {
+      setData(articleData);
+      // }
     };
     if (searchParams.get("id")) fetchArticles();
   }, [searchParams.get("id")]);
