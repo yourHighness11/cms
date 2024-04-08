@@ -13,7 +13,6 @@
     "@chakra-ui/react": "^2.8.2",
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
-    "@types/react": "^18.2.74",
     "bcryptjs": "^2.4.3",
     "draft-js": "^0.11.7",
     "draft-js-export-html": "^1.4.1",
@@ -29,10 +28,11 @@
     "react": "^18",
     "react-dom": "^18",
     "react-draft-wysiwyg": "^1.15.0",
-    "typescript": "^5.4.4",
     "uuid": "^9.0.1"
   },
   "devDependencies": {
-    "@types/node": "^20.12.5"
+    "@types/node": "^20.12.5",
+    "@types/react": "^18.0.1",
+    "typescript": "^5.4.4"
   }
 }
