@@ -33,7 +33,7 @@ const Nav = ({ loading }) => {
         gap="2"
         pos="fixed"
         w="100%"
-        zIndex={1}
+        zIndex={5}
         top={0}
         boxShadow="xl"
       >
