@@ -17,6 +17,13 @@ const Nav = ({ loading }) => {
     setItems(JSON.parse(localStorage.getItem("userData")));
   }, []);
 
+  const handleLogout = async () => {
+    localStorage.removeItem("userData");
+    setTimeout(() => {
+      window.location.reload();
+    }, 1000);
+  };
+
   return (
     <div>
       <Flex
@@ -67,10 +74,7 @@ const Nav = ({ loading }) => {
                 <Button
                   colorScheme="red"
                   isLoading={loading}
-                  onClick={() => {
-                    localStorage.removeItem("userData");
-                    // window.location.reload();
-                  }}
+                  onClick={handleLogout}
                 >
                   Logout
                 </Button>
