@@ -21,7 +21,7 @@ const Nav = ({ loading }) => {
     localStorage.removeItem("userData");
     setTimeout(() => {
       window.location.reload();
-    }, 1000);
+    }, 2000);
   };
 
   return (
